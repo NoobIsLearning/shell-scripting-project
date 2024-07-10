@@ -7,7 +7,7 @@
 
 # This script will list all users who have access to given repository
 
-set -x
+#set -x
 set -eo pipefail
 
 # Github API URL
@@ -23,20 +23,20 @@ REPO_NAME=$2
 
 function github_api_get {
   local endpoint="$1"
-  local url="${API_GITHUB}/${endpoint}"
+  local url="${API_URL}/${endpoint}"
 
   # Send GET request to the github API with authentication
-  curl -s -u "${SERNAME}:${TOKEN}" "${url}"
+  curl -s -u "${USERNAME}:${TOKEN}" "${url}"
 }
 
 function list_user_with_read_access {
   local endpoint="repos/${REPO_OWNER}/${REPO_NAME}/collaborators"
   
   # fetch the list of collaborators on this repo
-  collaborators="$(github_api_get "endpoint" | jq -r '.[] | select(.permission.pull==true) | .login')"
+  collaborators="$(github_api_get "${endpoint}" | jq -r '.[] | select(.permissions.pull==true) | .login')"
 
   # Display collaborators with read access
-  if [[ -z "$collaborators"]]
+  if [[ -z "$collaborators" ]]
   then
     echo "No users with read access found for Repo: ${REPO_OWNER}/${REPO_NAME}"
   else
