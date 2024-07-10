@@ -11,7 +11,7 @@ set -x
 set -eo pipefail
 
 # Github API URL
-API_GITHUB = "https://api.github.com"
+API_URL="https://api.github.com"
 
 # Username and personal github access token
 USERNAME=$username
@@ -36,7 +36,8 @@ function list_user_with_read_access {
   collaborators="$(github_api_get "endpoint" | jq -r '.[] | select(.permission.pull==true) | .login')"
 
   # Display collaborators with read access
-  if [[ -z "$collaborators"]]; then
+  if [[ -z "$collaborators"]]
+  then
     echo "No users with read access found for Repo: ${REPO_OWNER}/${REPO_NAME}"
   else
     echo "Repo: ${REPO_OWNER}/${REPO_NAME}"
